@@ -4,6 +4,7 @@
 #include <linux/init.h>
 #include <linux/kprobes.h>
 #include<linux/kmsg_dump.h>
+#include <linux/version.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("PWY");
@@ -35,7 +36,7 @@ static __nocfi int ret_handler_dump_backtrace(struct kretprobe_instance *ri, str
             pr_err("Failed to open panic_log.txt\n");
             return 0;
         }
-
+#if LINUX_VERSION_CODE <= KERNEL_VERSION(5,10,0)
         dumper.active = true;
     
         while (kmsg_dump_get_line(&dumper, false, line, sizeof(line), &len)) {
@@ -43,6 +44,19 @@ static __nocfi int ret_handler_dump_backtrace(struct kretprobe_instance *ri, str
             if(ret != len)
                 break;
         }
+#else
+       struct kmsg_dump_iter iter = {0};
+       kmsg_dump_rewind(&iter);
+       while (kmsg_dump_get_line(&iter, false, line, sizeof(line), &len)) {
+            ret = kernel_write_(file, line, len, &file->f_pos);
+            if (ret < 0) {
+                pr_err("kernel_write failed: %zd\n", ret);
+                break;
+            }
+        }
+
+
+#endif
         vfs_fsync(file, 0);
         filp_close_(file, NULL);
     }
