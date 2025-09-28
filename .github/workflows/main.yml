@@ -40,7 +40,7 @@ jobs:
       - name: Prepare kerneldriver directory
         run: |
           mkdir kerneldriver
-          mv ./*.h ./*.c ./Makefile kerneldriver/
+          mv ./*.c ./Makefile kerneldriver/
           
       - name: Install repo tool
         run: |
