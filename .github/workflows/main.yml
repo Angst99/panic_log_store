@@ -40,7 +40,7 @@ jobs:
       - name: Prepare kerneldriver directory
         run: |
           mkdir kerneldriver
-          mv ./panic_log_store/*.h ./panic_log_store/*.c ./panic_log_store/Makefile kerneldriver/
+          mv ./*.h ./*.c ./Makefile kerneldriver/
           
       - name: Install repo tool
         run: |
