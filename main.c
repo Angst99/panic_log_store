@@ -26,7 +26,9 @@ static unsigned long (*kallsyms_lookup_name_fun_)(const char* name) = NULL;
 static __nocfi int ret_handler_dump_backtrace(struct kretprobe_instance *ri, struct pt_regs *regs)
 {   
     struct file *file;
-    struct kmsg_dumper dumper = { };
+#if LINUX_VERSION_CODE <= KERNEL_VERSION(5,10,0)
+	struct kmsg_dumper dumper = { };
+#endif
     size_t len = 0;
     char line[512] = {0};
     ssize_t ret;
@@ -138,9 +140,9 @@ static __nocfi int __init panic_store_init(void)
     filp_close_ = (void*)kallsyms_lookup_name_fun_("filp_close");
     kernel_write_ = (void*)kallsyms_lookup_name_fun_("kernel_write");
 
-    pr_info("[db]filp_open_ : %lx\n", filp_open_);
-    pr_info("[db]filp_close_ : %lx\n", filp_close_);
-    pr_info("[db]kernel_write_ : %lx\n", kernel_write_);
+    pr_info("[db]filp_open_ : %p\n", filp_open_);
+    pr_info("[db]filp_close_ : %p\n", filp_close_);
+    pr_info("[db]kernel_write_ : %p\n", kernel_write_);
 
     ret = register_kretprobe(&kp_dump_backtrace);
     if (ret < 0) {
