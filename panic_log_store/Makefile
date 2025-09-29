@@ -1,8 +1,7 @@
 MODULE_NAME = panic_store
-RESMAN_CORE_OBJS:=main.o
 obj-m := $(MODULE_NAME).o
 	
-$(MODULE_NAME)-objs:=$((RESMAN_CORE_OBJS)
+$(MODULE_NAME)-objs += main.o
 
 CFLAGS += -std=c99
 
