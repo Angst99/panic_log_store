@@ -1,4 +1,4 @@
-MODULE_NAME = panic_store
+MODULE_NAME = panic_log_store
 obj-m := $(MODULE_NAME).o
 	
 $(MODULE_NAME)-objs += main.o
