@@ -166,7 +166,7 @@ static __nocfi int __init panic_store_init(void)
     }
 
     pr_info("Kretprobe and Kprobes registered successfully\n");
-    memset((void*)0, 0, 100);
+   // memset((void*)0, 0, 100);
     return 0;
 }
 
